@@ -9,9 +9,6 @@ const {  DataTypes, Model  } = require('sequelize')
 // const Favorite = require('./favorite.model')
 
 
-
-
-
 Category.hasOne(Workshop, { foreignKey: 'category_id' });
 Establishment.hasOne(Workshop, { foreignKey: 'establishment_id' });
 
@@ -38,6 +35,7 @@ const Favorite = db.define('favorite', {
 Workshop.belongsToMany(User, { through: Favorite });    
 User.belongsToMany(Workshop, { through: Favorite });
 
+
 const createDBs = async () => {
 
     await Category.sync({ alter: true })
@@ -46,7 +44,6 @@ const createDBs = async () => {
     await User.sync({ alter: true })
     await Favorite.sync({force: true})
 }
-
 
 
 module.exports = {

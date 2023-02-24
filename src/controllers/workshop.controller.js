@@ -1,13 +1,37 @@
+const { Workshop } = require('../model/index')
 
 
-const router = require('express').Router();
-const { faker } = require("@faker-js/faker")
 
-//models imports
-const { Workshop, User, Establishment, Category }  = require("../model/index")
+const createWorkshop =  async ( req, res) => {
+
+    const body = req.body    
+
+    try {
+
+        const createWorkshop = await Workshop.create({
+            workshop_name: body.workshop_name,
+            workshop_date: body.workshop_date,
+            workshop_hour: body.workshop_hour,
+            category_id: body.category_id,
+            establishment_id: body.establishment_id
+        })
+    
+         res.status(201).json({
+            ok: true,
+            status: 201,
+            body: `Atelier ${ body.workshop_name} cree`
+            
+        })
+        
+    } catch (error) {
+        res.status(500)
+        console.log(error)
+        
+    }
+}
 
 
-router.get("/ateliers", async ( req, res) => {
+const getAllWorkshops = async ( req, res) => {
 
     try {
 
@@ -25,14 +49,12 @@ router.get("/ateliers", async ( req, res) => {
         console.log(error)
          
     }
+}
 
 
-    
-});
+const getWorkshopById = async ( req, res) => {
 
-router.get("/atelier/:workshop_id", async ( req, res) => {
-    
-    const id = req.params.workshop_id
+    const id = req.params.id
 
     try {
 
@@ -65,43 +87,11 @@ router.get("/atelier/:workshop_id", async ( req, res) => {
 
             console.log(error)       
     }
-    
-});
+}
 
-router.post("/atelier", async ( req, res) => {
+const updateWorkshop = async ( req, res) => {
 
-    const body = req.body    
-
-    try {
-
-        const createWorkshop = await Workshop.create({
-            workshop_name: body.workshop_name,
-            workshop_date: body.workshop_date,
-            workshop_hour: body.workshop_hour,
-            category_id: body.category_id,
-            establishment_id: body.establishment_id
-        })
-    
-         res.status(201).json({
-            ok: true,
-            status: 201,
-            body: `Atelier ${ body.workshop_name} cree`
-            
-        })
-        
-    } catch (error) {
-        res.status(500)
-        console.log(error)
-        
-    }
-
-
-});
-
-router.put("/atelier/:workshop_id", async ( req, res) => {
-    await Workshop.sync()
-
-    const id = req.params.workshop_id
+    const id = req.params.id
     const body = req.body
 
     try {
@@ -144,16 +134,11 @@ router.put("/atelier/:workshop_id", async ( req, res) => {
         console.log(error)
     }
 
+}
 
-    
+const deleteWorkshop = async ( req, res) => {
 
-});
-
-router.delete("/atelier/:workshop_id", async ( req, res) => {
-        await Workshop.sync()
-
-
-    const id = req.params.workshop_id
+    const id = req.params.id
 
     try {
 
@@ -185,7 +170,17 @@ router.delete("/atelier/:workshop_id", async ( req, res) => {
         console.log(error)
         
     }
+ 
 
-});
+}
 
-module.exports = router;
+
+
+
+module.exports = {
+    createWorkshop,
+    getAllWorkshops,
+    getWorkshopById,
+    updateWorkshop,
+    deleteWorkshop
+}
