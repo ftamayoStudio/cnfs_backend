@@ -1,4 +1,4 @@
-const { Category } = require('../model/index')
+const { Category, Workshop, Establishment } = require('../model/index')
 
 
 const createCategory = async ( req, res) => {
@@ -22,7 +22,13 @@ const getAllCategories = async ( req, res) => {
 
     try {
 
-        const categories = await Category.findAll()
+        const categories = await Category.findAll({
+            // include: [
+            //     { model: Workshop,
+            //         // model:Establishment
+            //      }
+            //   ]
+        })
 
         res.status(200).json({
             ok: true,

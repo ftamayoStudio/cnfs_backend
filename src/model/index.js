@@ -9,9 +9,11 @@ const {  DataTypes, Model  } = require('sequelize')
 // const Favorite = require('./favorite.model')
 
 
-Category.hasOne(Workshop, { foreignKey: 'category_id' });
-Establishment.hasOne(Workshop, { foreignKey: 'establishment_id' });
 
+Establishment.hasMany(Workshop, { foreignKey: "establishments"});
+
+Workshop.belongsTo(Establishment,{ foreignKey: "establishment_id"});
+Workshop.belongsTo(Category,{ foreignKey: "category_id"});
 
 
 const Favorite = db.define('favorite', {
@@ -39,10 +41,10 @@ User.belongsToMany(Workshop, { through: Favorite });
 const createDBs = async () => {
 
     await Category.sync({ alter: true })
-    await Establishment.sync({ alter: true })
     await Workshop.sync({ alter: true })
-    await User.sync({ alter: true })
-    await Favorite.sync({force: true})
+    await Establishment.sync({ alter: true })
+    // await User.sync({ alter: true })
+    // await Favorite.sync({alter: true})
 }
 
 

@@ -1,24 +1,33 @@
-const { Workshop } = require('../model/index')
+const { Workshop, Category, Establishment } = require('../model/index')
 
 
 
 const createWorkshop =  async ( req, res) => {
 
-    const body = req.body    
+    const body = req.body
+    body.establishments = body.establishment_id
+    
+
 
     try {
 
-        const createWorkshop = await Workshop.create({
-            workshop_name: body.workshop_name,
-            workshop_date: body.workshop_date,
-            workshop_hour: body.workshop_hour,
-            category_id: body.category_id,
-            establishment_id: body.establishment_id
-        })
+        const createWorkshop = await Workshop.create(
+            body
+        )
+
+        // const createWorkshop = await Workshop.create({
+        //     workshop_name: body.workshop_name,
+        //     workshop_date: body.workshop_date,
+        //     workshop_hour: body.workshop_hour,
+        //     establishments:body.establishment_id,
+        //     category_id: body.category_id,
+        //     establishment_id: body.establishment_id
+        // })
     
          res.status(201).json({
             ok: true,
             status: 201,
+            
             body: `Atelier ${ body.workshop_name} cree`
             
         })
@@ -35,7 +44,23 @@ const getAllWorkshops = async ( req, res) => {
 
     try {
 
-        const workshops = await Workshop.findAll()
+        const workshops = await Workshop.findAll({
+
+        // Logro obtener la informacion de establishments y category por que workshop tiene relacion
+        // con ambas tablas
+             include: [
+                {
+                    model: Establishment,
+                    attributes:["establishment_name"]
+                    
+                 },
+                 {
+                    model: Category,
+                    attributes:["category_name"]
+                 }
+              ]
+              
+        })
 
         res.status(200).json({
             ok: true,

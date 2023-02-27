@@ -88,7 +88,7 @@ const getFavoriteById = async ( req, res) => {
     try {
 
         const favorites = await Favorite.findAll({
-            where: {userUserId:id},
+            where: { userUserId:id },
         })
     
         if (!favorites) {

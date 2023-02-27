@@ -1,4 +1,4 @@
-const { Establishment } = require('../model/index')
+const { Establishment, Workshop, Category } = require('../model/index')
 
 
 const createEstablishment = async ( req, res) => {
@@ -27,7 +27,12 @@ const getAllEstablishment = async ( req, res) => {
 
     try {
 
-        const establishments = await Establishment.findAll()
+        const establishments = await Establishment.findAll({
+            // include: { model: Workshop,
+            // attributes: ["workshop_name"]}
+              
+        })
+
 
         res.status(200).json({
             ok: true,
@@ -50,7 +55,18 @@ const getEstablishmentById = async ( req, res) => {
     try {
 
         const establishment = await Establishment.findOne({
-            where: {establishment_id:id}
+            where: {establishment_id:id},
+
+            //Busqueda anidada que me permite obtener la informacion de la categoria por que 
+            // categoria tiene relacion con workshop
+            include: [{
+                model: Workshop,
+                attributes:["workshop_name", "workshop_date","workshop_hour"],
+                include: [{
+                  model: Category,
+                  attributes:["category_name"]
+                }]
+              }]
         })
     
         if (!establishment) {
